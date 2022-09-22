@@ -1,44 +1,58 @@
-class vector {
-private:
-    int *data;
-    int last;
-    int capacity;
+#include "vector.hpp"
+#include <iostream>
 
-public:
-    explicit vector(int capacity = 1): capacity(capacity), last(0), data(new int[capacity]()) {}
-
-    ~vector() { delete[] data; }
-
-    // adds element to the last avaialable position,
-    // resizes vector if current capacity is reached
-    void push_back(int num) {
-        if (last == capacity) resize(2 * capacity);
-        data[last++] = num;
+template <class T>
+vector<T>::vector(const vector<T> & other) {
+    data_ = new T[other.capacity_]();
+    capacity_ = other.capacity_;
+    size_ = other.size();
+    for (size_t i = 0; i < other.size(); i++) {
+        data_[i] = other.at(i);
     }
+}
 
-    // resizes vector to given capacity
-    void resize(int new_capacity) {
-        if (new_capacity <= capacity) return;
-
-        int *new_data = new int[new_capacity]();
-        for (int i = 0; i < last; i++) new_data[i] = data[i];
-
-        capacity = new_capacity;
-        delete[] data;
-        data = new_data;
+template <class T>
+vector<T>::vector(const size_t size) : size_(size) {
+    size_t capacity = size_t(1) << (sizeof(size_t) * 8 - 1);
+    while (!(capacity & size) && capacity) {
+        capacity >>= 1;
     }
+    capacity <<= 1;
+    capacity_ = capacity;
+    data_ = new T[capacity]();
+}
 
-    int size() { return this->last; }
+template <class T>
+void vector<T>::push_back(const T elem) {
+    if (size_ == capacity_) resize(2 * capacity_);
+    data_[size_] = elem;
+    size_++;
+}
 
-    void set(int num, int idx) {
-        data[idx] = num;
+template <class T>
+vector<T> & vector<T>::operator=(const vector<T> & other) {
+    if (size_ > 0) {
+        delete[] data_;
     }
-    
-    int at(int idx) {
-        return data[idx];
+    data_ = new T[other.capacity_]();
+    capacity_ = other.capacity_;
+    size_ = other.size_;
+    for (size_t i = 0; i < other.size(); i++) {
+        data_[i] = other.at(i);
     }
-};
+    return *this;
+}
 
-int main(int argc, char **argv) {
-    return 0;
+template <class T>
+void vector<T>::resize(const size_t new_capacity) {
+    if (new_capacity <= capacity_) return;
+
+    T * new_data = new T[new_capacity]();
+    for (size_t i = 0; i < size_; i++) {
+        new_data[i] = data_[i];
+    }
+    capacity_ = new_capacity;
+    delete[] data_;
+    data_ = new_data;
+
 }
