@@ -1,5 +1,4 @@
 #include "vector.hpp"
-#include <iostream>
 
 template <class T>
 vector<T>::vector(const vector<T> & other) {
