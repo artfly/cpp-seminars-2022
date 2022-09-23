@@ -5,10 +5,33 @@
 class vector {
 public:
 
-  vector(int capacity) {
-    this->capacity_ = capacity;
-    this->size_ = 0;
-    this->data_ = new int[capacity]();
+  vector(int capacity = 8): capacity_(capacity),
+   size_(0), data_(new int[capacity]()) {
+  }
+  vector(vector & other): capacity_(other.capacity_),
+    size_(other.size_), data_(new int[capacity_]) {
+      std::copy(other.data_, other.data_ + size_, data_);
+    }
+
+  // v1 = v2 = v3;
+  // v1 = v1;
+  // v1 = v2.operator=(v3)
+  // v1.operator=(v2.operator=(v3))
+  // v1 = v2; => other(v2)
+  vector & operator=(vector other) {
+    // copy ctor, new data_ initialized
+    capacity_ = other.capacity_;
+    size_ = other.size_;
+    // data_ -> other, other.data_ -> this
+    std::swap(data_, other.data_);
+    // if (&other != this) {
+    //   delete[] data_;
+    //   capacity_ = other.capacity_;
+    //   size_ = other.size_;
+    //   data_ = new int[capacity_];
+    //   std::copy(other.data_, other.data_ + size_, data_);
+    // }
+    // return *this;
   }
 
   ~vector() { delete[] data_; }
@@ -25,13 +48,17 @@ public:
 
   int size() { return this->size_; }
 
+  int & operator[](size_t idx) {
+    // assert
+  }
+
   void set(int num, int idx);
   int at(int idx);
 
 private:
-  int *data_;
-  int size_;
   int capacity_;
+  int size_;
+  int *data_;
 
   // resizes vector to given capacity
   void resize(int new_capacity) {
@@ -101,27 +128,53 @@ class A {
     B * pb;
 };
 
+class D {
+ public:
+  D() {
+    std::cout << "D!" << std::endl; 
+  } 
+  D(int i) {
+    std::cout << "D int!" << std::endl;
+  }
+  D & operator=(const D & other) {
+    std::cout << "D assign!" << std::endl;
+    return *this;
+  }
+};
+
+class C {
+  public:
+  C(int i): d(D(i)), d1(D(42)) {
+    // d = D(i);
+    std::cout << "C!" << std::endl;
+  }
+  private:
+    D d;
+    D d1;
+};
+
 int main(int argc, char **argv) {
-  A a;
-  assert(a.a == 0);
-  assert(a.pa == nullptr);
-  assert(a.pb == nullptr);
+  C c(42);
+  // A a;
+  // assert(a.a == 0);
+  // assert(a.pa == nullptr);
+  // assert(a.pb == nullptr);
 
-  a.a = 42;
-  a.pa = &(a.a);
-  a.pb = &(a.b);
+  // a.a = 42;
+  // a.pa = &(a.a);
+  // a.pb = &(a.b);
 
-  A a1(a);
+  // A a1(a);
 
-  assert(a1.a == 42);
-  assert(a1.pa == a.pa);
-  assert(a1.pb == a.pb);
+  // assert(a1.a == 42);
+  // assert(a1.pa == a.pa);
+  // assert(a1.pb == a.pb);
 
 
-  vector v1(8);
-  // init...
+  // vector v1(8);
+  // // init...
 
-  vector v3(v1);
+  // vector v3(v1);
 
   // vector v2;
   // v2 = v1;
