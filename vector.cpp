@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <array>
+#include <vector>
+#include <list>
 
 vector::vector(int capacity)
     : capacity_(capacity), size_(0), data_(new int[capacity]) {}
@@ -34,7 +37,8 @@ void vector::push_back(int num) {
 int vector::size() { return this->size_; }
 
 int &vector::operator[](size_t idx) {
-  // TODO
+  assert(idx >= 0 && idx < size_);
+  return data_[idx];
 }
 
 void vector::resize(int new_capacity) {
@@ -45,4 +49,46 @@ void vector::resize(int new_capacity) {
   capacity_ = new_capacity;
 }
 
-int main(int argc, char **argv) { vector v; }
+void print_arr(int * begin, int * end) {
+  int * it = begin;
+  while(it != end) {
+    std::cout << *it << std::endl;
+    it++;
+  }
+}
+
+// iterator
+
+int & vector::iterator::operator*() {
+  return v[idx_];
+}
+
+// int a = ++it;
+vector::iterator & vector::iterator::operator++() {
+  idx_++;
+  return *this;
+}
+
+// int a = it++;
+vector::iterator vector::iterator::operator++(int) {
+  iterator tmp(*this);
+  idx_++;
+  return tmp;
+}
+
+
+int main(int argc, char **argv) {
+  //  vector v;
+  //  int a[] = {1, 2, 3};
+  //  print_arr(a, a + 3);
+
+   std::vector<int> v = {1, 2, 3};
+   std::vector<int>::iterator b = v.begin();
+   auto it = b;
+   auto e = v.end();
+   while (it != e) {
+    std::cout << *it << std::endl;
+    it++;
+    // ++it;
+   }
+}
