@@ -57,10 +57,18 @@ void print_arr(int * begin, int * end) {
   }
 }
 
+vector::iterator /*???*/ vector::begin() { 
+  return vector::iterator(0, *this);
+}
+
+vector::iterator /*???*/ vector::end() {
+  return vector::iterator(size_, *this);
+}
+
 // iterator
 
 int & vector::iterator::operator*() {
-  return v[idx_];
+  return v_[idx_];
 }
 
 // int a = ++it;
@@ -76,19 +84,51 @@ vector::iterator vector::iterator::operator++(int) {
   return tmp;
 }
 
+bool vector::iterator::operator==(/*const vector::iterator * this, */ const vector::iterator & other) const {
+  return &v_ == &other.v_ && idx_ == other.idx_;
+}
+
+bool vector::iterator::operator!=(const vector::iterator & other) const {
+  return !(*this == other);
+}
+
+class A {
+  public:
+    explicit A(int i) {
+      std::cout << "A!" << std::endl;
+    }
+  private:
+    friend class B;
+    int data_;
+    // A foo();
+};
+
+class B {
+  public:
+    void foo(A & other) {
+      int i = other.data_;
+    }
+  private:
+    friend class C; 
+    int b;
+};
 
 int main(int argc, char **argv) {
   //  vector v;
   //  int a[] = {1, 2, 3};
   //  print_arr(a, a + 3);
 
-   std::vector<int> v = {1, 2, 3};
-   std::vector<int>::iterator b = v.begin();
-   auto it = b;
-   auto e = v.end();
-   while (it != e) {
-    std::cout << *it << std::endl;
-    it++;
-    // ++it;
-   }
+    // initializer_list v = {1, 2, 3};
+  //  vector v;
+  //  v.push_back(1);
+  //  v.push_back(2);
+  //  v.push_back(3);
+
+  //  vector::iterator b = v.begin();
+  //  vector::iterator it(b);
+  //  auto e = v.end();
+  //  while (it != e) {
+  //   std::cout << *it << std::endl;
+  //   it++;
+  //  }
 }
