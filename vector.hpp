@@ -3,11 +3,9 @@
 
 class vector {
  public:
- // expicit vector(): vector(DEFAULT_CAPACITY) {}
- // explicit vector(int capacity) {...}
   explicit vector(int capacity = DEFAULT_CAPACITY);
 
-  vector(vector &other);
+  vector(const vector &other);
 
   vector &operator=(vector other);
 
@@ -18,6 +16,7 @@ class vector {
   int size();
 
   int &operator[](size_t idx);
+  int operator[](size_t idx) const;
 
   class iterator {
     public:
@@ -29,22 +28,20 @@ class vector {
 
       int & operator*();
 
-      // prefix ++it
       iterator & operator++();
-      // postfix it++
-      iterator /*???*/ operator++(int);
+      iterator operator++(int);
 
     private:
       int idx_;
       vector & v_;
   };
 
-  iterator /*???*/ begin();
-
-  iterator /*???*/ end();
+  iterator begin();
+  iterator end();
 
  private:
   static const int DEFAULT_CAPACITY = 8;
+  
   int capacity_;
   int size_;
   int *data_;
