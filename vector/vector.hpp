@@ -18,6 +18,9 @@ class vector {
   int &operator[](size_t idx);
   int operator[](size_t idx) const;
 
+  bool operator==(const vector & other) const;
+  bool operator!=(const vector & other) const;
+
   class iterator {
     public:
       iterator(const iterator & other) = default;

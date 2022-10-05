@@ -46,6 +46,18 @@ int vector::operator[](size_t idx) const {
   return data_[idx];
 }
 
+bool vector::operator==(const vector & other) const {
+  if (this->size_ != other.size_) return false;
+  for (size_t i = 0; i < size_; i++) {
+    if (data_[i] != other.data_[i]) return false;
+  }
+  return true;
+}
+
+bool vector::operator!=(const vector & other) const {
+  return !(*this == other);
+}
+
 void vector::resize(size_t new_capacity) {
   int *tmp = new int[new_capacity];
   std::copy(data_, data_ + size_, tmp);
