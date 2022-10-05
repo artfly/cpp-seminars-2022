@@ -11,7 +11,7 @@ class vector {
 
   ~vector();
 
-  void push_back(size_t num);
+  void push_back(int num);
 
   size_t size();
 

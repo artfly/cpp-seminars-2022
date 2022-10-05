@@ -26,7 +26,7 @@ vector &vector::operator=(vector other) {
 
 vector::~vector() { delete[] data_; }
 
-void vector::push_back(size_t num) {
+void vector::push_back(int num) {
   if (capacity_ == size_) {
     resize(capacity_ * 2);
   }
