@@ -7,7 +7,7 @@
 #include <vector>
 #include <list>
 
-vector::vector(int capacity)
+vector::vector(size_t capacity)
     : capacity_(capacity), size_(0), data_(new int[capacity]) {}
 
 vector::vector(const vector &other)
@@ -26,7 +26,7 @@ vector &vector::operator=(vector other) {
 
 vector::~vector() { delete[] data_; }
 
-void vector::push_back(int num) {
+void vector::push_back(size_t num) {
   if (capacity_ == size_) {
     resize(capacity_ * 2);
   }
@@ -34,7 +34,7 @@ void vector::push_back(int num) {
   size_++;
 }
 
-int vector::size() { return size_; }
+size_t vector::size() { return size_; }
 
 int &vector::operator[](size_t idx) {
   assert(idx >= 0 && idx < size_);
@@ -46,7 +46,7 @@ int vector::operator[](size_t idx) const {
   return data_[idx];
 }
 
-void vector::resize(int new_capacity) {
+void vector::resize(size_t new_capacity) {
   int *tmp = new int[new_capacity];
   std::copy(data_, data_ + size_, tmp);
   delete[] data_;

@@ -3,7 +3,7 @@
 
 class vector {
  public:
-  explicit vector(int capacity = DEFAULT_CAPACITY);
+  explicit vector(size_t capacity = DEFAULT_CAPACITY);
 
   vector(const vector &other);
 
@@ -11,9 +11,9 @@ class vector {
 
   ~vector();
 
-  void push_back(int num);
+  void push_back(size_t num);
 
-  int size();
+  size_t size();
 
   int &operator[](size_t idx);
   int operator[](size_t idx) const;
@@ -21,7 +21,7 @@ class vector {
   class iterator {
     public:
       iterator(const iterator & other) = default;
-      iterator(int idx, vector & v): idx_(idx), v_(v) {}
+      iterator(size_t idx, vector & v): idx_(idx), v_(v) {}
 
       bool operator==(const iterator & other) const;
       bool operator!=(const iterator & other) const;
@@ -32,7 +32,7 @@ class vector {
       iterator operator++(int);
 
     private:
-      int idx_;
+      size_t idx_;
       vector & v_;
   };
 
@@ -40,11 +40,11 @@ class vector {
   iterator end();
 
  private:
-  static const int DEFAULT_CAPACITY = 8;
+  static const size_t DEFAULT_CAPACITY = 8;
   
-  int capacity_;
-  int size_;
+  size_t capacity_;
+  size_t size_;
   int *data_;
 
-  void resize(int new_capacity);
+  void resize(size_t new_capacity);
 };
