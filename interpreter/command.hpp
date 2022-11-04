@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <iostream>
+#include <vector>
 
 class Command {
   public:
@@ -49,4 +50,18 @@ class Read: public Command {
       std::cin >> number;
       *ptr = number;
     }
+};
+
+class While: public Command {
+  public:
+    While(std::vector<Command *> & body): body_(body) {}
+    void apply(uint8_t * ptr) override {
+      while (*ptr != 0) {
+        for (Command * command : body_) {
+          command->apply(ptr);
+        }
+      }
+    }
+  private:
+    std::vector<Command *> body_;
 };
