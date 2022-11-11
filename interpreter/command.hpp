@@ -3,6 +3,11 @@
 #include <iostream>
 #include <vector>
 
+#include "interpreter.hpp"
+#include "interpreter_error.hpp"
+#include <algorithm>
+#include <sstream>
+
 class Command {
   public:
     virtual void apply(uint8_t * ptr) = 0;
@@ -65,44 +70,3 @@ class While: public Command {
   private:
     std::vector<Command *> body_;
 };
-
-Command * get_cmd(std::string::iterator & it, std::string::iterator & end) {
-  if (*it == '[') {
-    std::vector<Command *> body;
-    while (it != end && *it != ']') {
-      it++;
-      Command * cmd = get_cmd(it, end);
-      body.push_back(cmd);
-    }
-    if (it == end) {
-      // vse ploho!!!!
-      return nullptr;
-    }
-    return new While(body);
-  }
-
-  switch (*it) {
-    case '>':
-      return new Right();
-    case '<':
-      return new Left();
-  }
-  return nullptr;
-}
-
-// '[' -> while_cmd
-// '.' -> write_cmd
-Command * while_cmd(std::string::iterator & it, std::string::iterator & end) {
-  
-    std::vector<Command *> body;
-    while (it != end && *it != ']') {
-      it++;
-      Command * cmd = get_cmd(it, end);
-      body.push_back(cmd);
-    }
-    if (it == end) {
-      // vse ploho!!!!
-      return nullptr;
-    }
-    return new While(body);
-}
