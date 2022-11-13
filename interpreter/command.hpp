@@ -1,72 +1,80 @@
 #pragma once
+
 #include <cstdint>
 #include <iostream>
-#include <vector>
-
-#include "interpreter.hpp"
-#include "interpreter_error.hpp"
+#include <list>
 #include <algorithm>
 #include <sstream>
 
+#include "data_it.hpp"
+
 class Command {
   public:
-    virtual void apply(uint8_t * ptr) = 0;
+    virtual void apply(data_it & it) = 0;
+    virtual ~Command() {}
 };
 
 class Right: public Command {
   public:
-    void apply(uint8_t * ptr) override {
-      ptr++;
+    void apply(data_it & it) override {
+      ++it;
     }
 };
 
 class Left: public Command {
   public:
-    void apply(uint8_t * ptr) override {
-      ptr--;
+    void apply(data_it & it) override {
+      --it;
     }
 };
 
 class Plus: public Command {
   public:
-    void apply(uint8_t * ptr) override {
-      *ptr++;
+    void apply(data_it & it) override {
+      (*it)++;
     }
 };
 
 class Minus: public Command {
   public:
-    void apply(uint8_t * ptr) override {
-      *ptr--;
+    void apply(data_it & it) override {
+      (*it)--;
     }
 };
 
 class Write: public Command {
   public:
-    void apply(uint8_t * ptr) override {
-      std::cout << (*ptr) << std::endl;
+    void apply(data_it & it) override {
+      std::cout << unsigned(*it) << std::endl;
     }
 };
 
 class Read: public Command {
   public:
-    void apply(uint8_t * ptr) override {
+    void apply(data_it & it) override {
       int number;
       std::cin >> number;
-      *ptr = number;
+      *it = number;
     }
 };
 
 class While: public Command {
   public:
-    While(std::vector<Command *> & body): body_(body) {}
-    void apply(uint8_t * ptr) override {
-      while (*ptr != 0) {
+    While(const std::list<Command *> & body): body_(body) {}
+
+    ~While() override {
+      for (Command * command : body_) {
+          delete command;
+      }
+    }
+
+    void apply(data_it & it) override {
+      while (*it != 0) {
         for (Command * command : body_) {
-          command->apply(ptr);
+          command->apply(it);
         }
       }
     }
   private:
-    std::vector<Command *> body_;
+    std::list<Command *> body_;
 };
