@@ -111,6 +111,15 @@ void test9() {
     // ~A!
 }
 
+template<typename T, typename V>
+void two_shared_ptrs(std::shared_ptr<T> sp1, std::shared_ptr<V> sp2) {
+}
+
+template<typename T, typename V>
+void test() {
+    shared_ptr(new T()), shared_ptr(new V());
+}
+
 int main() {
     return 0;
 }
